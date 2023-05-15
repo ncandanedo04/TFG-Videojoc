@@ -1,4 +1,5 @@
-## Classe que gestiona el nostre jugador, extes de la classe Actor
+## Classe que gestiona el nostre jugador, extes de la classe Actor 
+## 
 extends Actor
 
 export var xafat_impuls = 1000.0

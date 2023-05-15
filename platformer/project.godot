@@ -20,7 +20,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Prototip 1"
+config/name="TFG_VIDEOJOC"
 run/main_scene="res://src/Levels/TestLvl.tscn"
 config/icon="res://icon.png"
 
