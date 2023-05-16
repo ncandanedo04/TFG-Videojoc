@@ -19,7 +19,11 @@ func _physics_process(delta: float) -> void:
 	var direccio: = get_dirreccio()
 	#_vel = acceleracio * direccio
 	_vel = calcular_moviment_velocitat(_vel, acceleracio, direccio, is_jump_interrupted)
-	_vel = move_and_slide(_vel, FLOOR_NORMAL) #Vector2.UP per fer que move and slide reconegui el salt del jugador
+	var snap: = Vector2.DOWN * 50.0 if direccio.y == 0.0 else Vector2.ZERO
+	#Vector2.UP per fer que move and slide reconegui el salt del jugador
+	_vel = move_and_slide_with_snap(
+		_vel, snap, FLOOR_NORMAL, true, 4, PI/3.0
+	) 
 
 ## funció que ens retorna la direccó del nostre jugador
 func get_dirreccio() -> Vector2:
@@ -28,7 +32,7 @@ func get_dirreccio() -> Vector2:
 	##retonra un decimal 0 / 1 representant la intensitat d'aquesta acció (per exemple un joy)
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"), # valor X
 		# valor Y , per saltar ha de ser negatiu ja que dins el motor està invertit
-		-1.0 if Input.get_action_strength("jump") and is_on_floor() else 1.0
+		-1.0 if Input.get_action_strength("jump") and is_on_floor() else 0.0
 	)
 
 

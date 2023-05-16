@@ -17,6 +17,9 @@ func _physics_process(delta: float) -> void:
 	_vel.y += gravetat * delta
 	if is_on_wall():
 		_vel.x *= -1.0
-	_vel.y = move_and_slide(_vel, FLOOR_NORMAL).y
+	var snap: = Vector2.DOWN * 65.0
+	_vel.y = move_and_slide_with_snap(
+		_vel, snap, FLOOR_NORMAL
+	).y
 
 
