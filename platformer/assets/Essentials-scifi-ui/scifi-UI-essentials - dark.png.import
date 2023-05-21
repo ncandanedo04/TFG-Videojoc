@@ -1,0 +1,17 @@
+[remap]
+
+importer="texture_atlas"
+type="Texture"
+path="res://.import/scifi-UI-essentials - dark.png-c784afead0aadee3396c79e62f4fd6f2.res"
+
+[deps]
+
+source_file="res://assets/Essentials-scifi-ui/scifi-UI-essentials - dark.png"
+dest_files=[ "res://.import/scifi-UI-essentials - dark.png-c784afead0aadee3396c79e62f4fd6f2.res" ]
+
+[params]
+
+atlas_file=""
+import_mode=0
+crop_to_region=false
+trim_alpha_border_from_region=true

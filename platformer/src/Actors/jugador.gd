@@ -3,18 +3,22 @@
 extends Actor
 
 export var xafat_impuls = 1000.0
+##Precarreguem la bala per poder-la utilitzar dins de la classe jugador
+onready var bullet = preload("res://src/Objects/Bullet.tscn")
+var b 
 
 func _on_EnemyDetector_area_entered(area: Area2D) -> void:
 	_vel = calcular_xafar_velocitat(_vel, xafat_impuls)
 
 ## detectem si l'enemic ens toca per matar-nos
 func _on_EnemyDetector_body_entered(body: Node) -> void:
-	queue_free()
+	die() ##funcio per matar el jugador
 
 # funcó del motor per processar les físiques per cada frame
 # està pensada per gestionar com interactuen per exemple els nostres jugador
 # o enemics amb l'entorn
 func _physics_process(delta: float) -> void:
+	
 	var is_jump_interrupted:= Input.is_action_just_released("jump") and _vel.y < 0.0
 	var direccio: = get_dirreccio()
 	#_vel = acceleracio * direccio
@@ -23,7 +27,34 @@ func _physics_process(delta: float) -> void:
 	#Vector2.UP per fer que move and slide reconegui el salt del jugador
 	_vel = move_and_slide_with_snap(
 		_vel, snap, FLOOR_NORMAL, true, 4, PI/3.0
-	) 
+	)
+	spriteDir() 
+	shoot($AnimatedSprite.flip_h)
+	
+##Funcio per disparar l'arma l'hi passem per parametre la direcció 
+func shoot(direction):
+	if Input.is_action_just_pressed("shoot"):
+		b = bullet.instance()
+		b.init(direction) 
+		get_parent().add_child(b)
+		b.global_position = $Position2D.global_position
+		
+
+func spriteDir() -> void:
+	if Input.is_action_pressed("move_right"):
+		$Position2D.position.x = 57
+		$AnimatedSprite.flip_h = false
+		$AnimatedSprite.play("run")
+	elif Input.is_action_pressed("move_left"):
+		$Position2D.position.x = -57
+		$AnimatedSprite.flip_h = true
+		$AnimatedSprite.play("run")
+	elif Input.is_action_pressed("jump"):
+		$AnimatedSprite.play("jump")
+	elif Input.is_action_pressed("shoot"):
+		$AnimatedSprite.play("shoot")
+	else:
+		$AnimatedSprite.play("Idle")
 
 ## funció que ens retorna la direccó del nostre jugador
 func get_dirreccio() -> Vector2:
@@ -58,6 +89,19 @@ func calcular_xafar_velocitat(linear_velocity: Vector2, impulse: float) -> Vecto
 	var out: = linear_velocity
 	out.y = -impulse
 	return out
+	
+##Funció que elimina al jugador i ens suma una mort al comptador
+func die() -> void:
+	$AnimatedSprite.play("die")
+	PlayerData.deaths +=1
+	PlayerData.lives -=1
+	if PlayerData.lives > 0:
+		get_tree().reload_current_scene()
+	else:
+		get_tree().change_scene("res://src/Screens/EndScreen_lost.tscn")
+	
+		
+
 
 
 
