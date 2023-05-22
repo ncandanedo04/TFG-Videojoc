@@ -6,7 +6,6 @@ onready var anim_player: AnimationPlayer = get_node("AnimationPlayer")
 export var lives: = 1
 
 func _on_body_entered(body: Node) -> void:
-	if(body.name == "jugador"):
 		PlayerData.lives += lives
 		visible = false
 		##anim_player.play("fade_out")

@@ -40,6 +40,8 @@ func shoot(direction):
 		b.global_position = $Position2D.global_position
 		
 
+## Funcio per indicar quina animació toca segons la direcció
+## Fa falta crear un stateMachine per gestionar millor tot... (diversos bugs / animacions incomplertes)
 func spriteDir() -> void:
 	if Input.is_action_pressed("move_right"):
 		$Position2D.position.x = 57
@@ -98,6 +100,7 @@ func die() -> void:
 	if PlayerData.lives > 0:
 		get_tree().reload_current_scene()
 	else:
+		## Si no et queden vides et retorna al menu de derrota
 		get_tree().change_scene("res://src/Screens/EndScreen_lost.tscn")
 	
 		
