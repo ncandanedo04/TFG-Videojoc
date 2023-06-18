@@ -5,14 +5,23 @@ extends Actor
 export var xafat_impuls = 1000.0
 ##Precarreguem la bala per poder-la utilitzar dins de la classe jugador
 onready var bullet = preload("res://src/Objects/Bullet.tscn")
+onready var granade = preload("res://src/Objects/granade.tscn")
+onready var shoot_sound := $shoot_sound
+var nade
 var b 
+var stateMachine
 
+#Funció que ens permet agafar totes les animacións per fer la state machine
+func _ready() -> void:
+	stateMachine = $AnimationTree.get("parameters/playback")
+	
 func _on_EnemyDetector_area_entered(area: Area2D) -> void:
 	_vel = calcular_xafar_velocitat(_vel, xafat_impuls)
 
 ## detectem si l'enemic ens toca per matar-nos
 func _on_EnemyDetector_body_entered(body: Node) -> void:
-	die() ##funcio per matar el jugador
+	stateMachine.travel("die")
+#	die() ##funcio per matar el jugador
 
 # funcó del motor per processar les físiques per cada frame
 # està pensada per gestionar com interactuen per exemple els nostres jugador
@@ -30,33 +39,48 @@ func _physics_process(delta: float) -> void:
 	)
 	spriteDir() 
 	shoot($AnimatedSprite.flip_h)
+	throw_nade($AnimatedSprite.flip_h)
 	
 ##Funcio per disparar l'arma l'hi passem per parametre la direcció 
 func shoot(direction):
 	if Input.is_action_just_pressed("shoot"):
+		shoot_sound.play()
 		b = bullet.instance()
 		b.init(direction) 
 		get_parent().add_child(b)
 		b.global_position = $Position2D.global_position
 		
-
+##Funcio per disparar l'arma l'hi passem per parametre la direcció 
+func throw_nade(direction):
+	if Input.is_action_just_pressed("nade"):
+		nade = granade.instance()
+		nade.init(direction) 
+		get_tree().current_scene.add_child(nade)
+		nade.global_position = $Position2D_throw.global_position
+		nade.throw(Vector2(500,-700))
+			
 ## Funcio per indicar quina animació toca segons la direcció
 ## Fa falta crear un stateMachine per gestionar millor tot... (diversos bugs / animacions incomplertes)
 func spriteDir() -> void:
+	var current = stateMachine.get_current_node()
 	if Input.is_action_pressed("move_right"):
 		$Position2D.position.x = 57
+		$Position2D_throw.position.x = 17
 		$AnimatedSprite.flip_h = false
-		$AnimatedSprite.play("run")
+		stateMachine.travel("run")
 	elif Input.is_action_pressed("move_left"):
 		$Position2D.position.x = -57
+		$Position2D_throw.position.x = -17
 		$AnimatedSprite.flip_h = true
-		$AnimatedSprite.play("run")
-	elif Input.is_action_pressed("jump"):
-		$AnimatedSprite.play("jump")
-	elif Input.is_action_pressed("shoot"):
-		$AnimatedSprite.play("shoot")
+		stateMachine.travel("run")
+	elif Input.is_action_just_pressed("jump"):
+		stateMachine.travel("jump")
+	elif Input.is_action_just_pressed("shoot"):
+		stateMachine.travel("shoot")
+	elif Input.is_action_just_pressed("nade"):
+		stateMachine.travel("granade")	
 	else:
-		$AnimatedSprite.play("Idle")
+		stateMachine.travel("idle")
 
 ## funció que ens retorna la direccó del nostre jugador
 func get_dirreccio() -> Vector2:
@@ -94,10 +118,11 @@ func calcular_xafar_velocitat(linear_velocity: Vector2, impulse: float) -> Vecto
 	
 ##Funció que elimina al jugador i ens suma una mort al comptador
 func die() -> void:
-	$AnimatedSprite.play("die")
+#	stateMachine.travel("die")
 	PlayerData.deaths +=1
 	PlayerData.lives -=1
 	if PlayerData.lives > 0:
+#		set_physics_process(false)
 		get_tree().reload_current_scene()
 	else:
 		## Si no et queden vides et retorna al menu de derrota

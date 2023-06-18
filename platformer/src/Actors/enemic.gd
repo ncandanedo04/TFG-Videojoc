@@ -2,6 +2,8 @@ extends "res://src/Actors/Actor.gd"
 
 export var score: = 100
 onready var bullet = preload("res://src/Objects/Bullet.tscn")
+onready var shoot_sound := $shoot_sound
+onready var die_sound := $die_sound
 var b ##variable pel projectil
 var isPlayer = null ## variable per saber is el rayCast esta tocant el jugador
 ##var collision = null ## variable per controlar si el Raycast està tocant el jugador
@@ -62,7 +64,7 @@ func _physics_process(delta: float) -> void:
 		
 	
 ## Amb el Raycast determinem si l'enemic veu el jugador per disparar-lo
-	if $RayCast2D_right.is_colliding() or $RayCast2D_left.is_colliding():
+	if $RayCast2D_right.is_colliding() or $RayCast2D_left.is_colliding() :
 		var collisionR = $RayCast2D_right.get_collider()
 		var collisionL = $RayCast2D_left.get_collider()
 		## evitem que els enemics es disparin entre ells
@@ -84,6 +86,7 @@ func _physics_process(delta: float) -> void:
 
 ## Funcio per disparar l'arma l'hi passem per parametre la posició de que encara l'enemic (dreta o esquerra)
 func shoot(direction):
+		shoot_sound.play()
 		b = bullet.instance()
 		b.init(direction) 
 		get_parent().add_child(b)
@@ -96,6 +99,7 @@ func _on_BulletHit_area_entered(area: Area2D) -> void:
 	die()
 	
 func die() -> void:
+	$die_sound.play()
 	$AnimatedSprite.play("die")
 	PlayerData.score +=100
 	queue_free()

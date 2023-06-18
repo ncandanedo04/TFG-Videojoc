@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://assets/Space Marine/Idle Gun/sprites/idle-gun2.png" type="Texture" id=1]
 [ext_resource path="res://src/Actors/jugador.gd" type="Script" id=2]
@@ -25,6 +25,15 @@
 [ext_resource path="res://assets/Space Marine/Die/sprites/die2.png" type="Texture" id=23]
 [ext_resource path="res://assets/Space Marine/Jump with Gun/sprites/jump-with-gun3.png" type="Texture" id=24]
 [ext_resource path="res://assets/Space Marine/Jump with Gun/sprites/jump-with-gun1.png" type="Texture" id=25]
+[ext_resource path="res://assets/Space Marine/Throw/sprites/throw3.png" type="Texture" id=26]
+[ext_resource path="res://assets/Space Marine/Throw/sprites/throw6.png" type="Texture" id=27]
+[ext_resource path="res://assets/Space Marine/Throw/sprites/throw8.png" type="Texture" id=28]
+[ext_resource path="res://assets/Space Marine/Throw/sprites/throw1.png" type="Texture" id=29]
+[ext_resource path="res://assets/Space Marine/Throw/sprites/throw4.png" type="Texture" id=30]
+[ext_resource path="res://assets/Space Marine/Throw/sprites/throw5.png" type="Texture" id=31]
+[ext_resource path="res://assets/Space Marine/Throw/sprites/throw7.png" type="Texture" id=32]
+[ext_resource path="res://assets/Space Marine/Throw/sprites/throw2.png" type="Texture" id=33]
+[ext_resource path="res://assets/sounds/fx/762x39 Single.wav" type="AudioStream" id=34]
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
@@ -37,6 +46,11 @@ animations = [ {
 "loop": true,
 "name": "die",
 "speed": 7.0
+}, {
+"frames": [ ExtResource( 29 ), ExtResource( 33 ), ExtResource( 26 ), ExtResource( 30 ), ExtResource( 31 ), ExtResource( 27 ), ExtResource( 32 ), ExtResource( 28 ) ],
+"loop": true,
+"name": "granade",
+"speed": 10.0
 }, {
 "frames": [ ExtResource( 25 ), ExtResource( 16 ), ExtResource( 24 ), ExtResource( 20 ), ExtResource( 21 ) ],
 "loop": true,
@@ -54,11 +68,318 @@ animations = [ {
 "speed": 4.0
 } ]
 
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ "Idle" ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1 ]
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("AnimatedSprite/AnimationPlayer:playback_speed")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "die"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "die" ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2 ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "die"
+} ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "granade"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "granade" ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "idle"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "Idle" ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 2, 1, 0 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "jump"
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "jump" ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "run"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "run" ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "shoot"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "shoot" ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 28, 49 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 36.25, 42 )
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "die"
+
+[sub_resource type="AnimationNodeAnimation" id=33]
+animation = "granade"
+
+[sub_resource type="AnimationNodeTimeScale" id=34]
+
+[sub_resource type="AnimationNodeBlendTree" id=35]
+nodes/Animation/node = SubResource( 33 )
+nodes/Animation/position = Vector2( 307, 135 )
+nodes/TimeScale/node = SubResource( 34 )
+nodes/TimeScale/position = Vector2( 520, 140 )
+nodes/output/position = Vector2( 740, 180 )
+node_connections = [ "output", 0, "TimeScale", "TimeScale", 0, "Animation" ]
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=16]
+animation = "jump"
+
+[sub_resource type="AnimationNodeAnimation" id=28]
+animation = "run"
+
+[sub_resource type="AnimationNodeTimeScale" id=29]
+
+[sub_resource type="AnimationNodeBlendTree" id=30]
+graph_offset = Vector2( 0, -80 )
+"nodes/Animation 2/node" = SubResource( 28 )
+"nodes/Animation 2/position" = Vector2( 500, 180 )
+nodes/TimeScale/node = SubResource( 29 )
+nodes/TimeScale/position = Vector2( 760, 160 )
+nodes/output/position = Vector2( 960, 160 )
+node_connections = [ "output", 0, "TimeScale", "TimeScale", 0, "Animation 2" ]
+
+[sub_resource type="AnimationNodeAnimation" id=18]
+animation = "shoot"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=31]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=32]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=36]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=37]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachine" id=12]
+states/die/node = SubResource( 14 )
+states/die/position = Vector2( 720, 139 )
+states/granade/node = SubResource( 35 )
+states/granade/position = Vector2( 500, 127 )
+states/idle/node = SubResource( 11 )
+states/idle/position = Vector2( 671, 247 )
+states/jump/node = SubResource( 16 )
+states/jump/position = Vector2( 887, 407 )
+states/run/node = SubResource( 30 )
+states/run/position = Vector2( 460, 383 )
+states/shoot/node = SubResource( 18 )
+states/shoot/position = Vector2( 943, 223 )
+transitions = [ "idle", "die", SubResource( 19 ), "idle", "jump", SubResource( 22 ), "idle", "shoot", SubResource( 23 ), "shoot", "idle", SubResource( 24 ), "jump", "idle", SubResource( 25 ), "idle", "run", SubResource( 31 ), "run", "idle", SubResource( 32 ), "idle", "granade", SubResource( 36 ), "granade", "idle", SubResource( 37 ) ]
+start_node = "idle"
+end_node = "die"
+graph_offset = Vector2( -1, 0 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=13]
 
 [node name="jugador" type="KinematicBody2D"]
 position = Vector2( 0, -48 )
@@ -68,12 +389,22 @@ acceleracio = Vector2( 800, 1400 )
 gravetat = 4000.0
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -21 )
+position = Vector2( -1, -22 )
 scale = Vector2( 3, 3 )
 frames = SubResource( 3 )
-animation = "shoot"
+animation = "Idle"
 frame = 1
-playing = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimatedSprite"]
+root_node = NodePath("../..")
+playback_speed = 0.0
+anims/RESET = SubResource( 4 )
+anims/die = SubResource( 5 )
+anims/granade = SubResource( 6 )
+anims/idle = SubResource( 7 )
+anims/jump = SubResource( 8 )
+anims/run = SubResource( 9 )
+anims/shoot = SubResource( 10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -3, 2 )
@@ -103,6 +434,21 @@ shape = SubResource( 2 )
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 57, -22 )
+
+[node name="Position2D_throw" type="Position2D" parent="."]
+position = Vector2( 17, -42 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 12 )
+anim_player = NodePath("../AnimatedSprite/AnimationPlayer")
+active = true
+parameters/playback = SubResource( 13 )
+parameters/granade/TimeScale/scale = 3.5
+parameters/run/TimeScale/scale = 1.5
+
+[node name="shoot_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 34 )
+volume_db = -9.614
 
 [connection signal="area_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_area_entered"]
 [connection signal="body_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_body_entered"]

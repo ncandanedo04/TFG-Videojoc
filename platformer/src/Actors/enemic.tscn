@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://assets/Humanoid Enemies/Sprites/Slodier/idle/soldier-idle3.png" type="Texture" id=1]
 [ext_resource path="res://src/Actors/enemic.gd" type="Script" id=2]
@@ -12,6 +12,8 @@
 [ext_resource path="res://assets/Humanoid Enemies/Sprites/Slodier/Run/robo-soldier-run5.png" type="Texture" id=10]
 [ext_resource path="res://assets/Humanoid Enemies/Sprites/Slodier/Hurt/soldier-hurt.png" type="Texture" id=11]
 [ext_resource path="res://assets/Humanoid Enemies/Sprites/Slodier/Run/robo-soldier-run6.png" type="Texture" id=12]
+[ext_resource path="res://assets/sounds/fx/762x39 Single.wav" type="AudioStream" id=13]
+[ext_resource path="res://assets/sounds/fx/sweetneo85__wilhelm.wav" type="AudioStream" id=14]
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
@@ -113,6 +115,14 @@ position = Vector2( -34, 45 )
 enabled = true
 cast_to = Vector2( 0, 14 )
 collision_mask = 8
+
+[node name="die_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 14 )
+volume_db = -9.614
+
+[node name="shoot_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 13 )
+volume_db = -9.614
 
 [connection signal="area_entered" from="BulletHit" to="." method="_on_BulletHit_area_entered"]
 [connection signal="body_entered" from="xafatDetector" to="." method="_on_xafatDetector_body_entered"]

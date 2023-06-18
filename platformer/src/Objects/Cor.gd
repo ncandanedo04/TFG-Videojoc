@@ -1,7 +1,6 @@
 extends Area2D
 
 ##Ens permet Agafar el valor d'un node i guardar-lo a una variable 
-onready var anim_player: AnimationPlayer = get_node("AnimationPlayer")
 
 export var lives: = 1
 
